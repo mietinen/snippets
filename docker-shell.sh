@@ -9,18 +9,12 @@
   
 dockers="$(docker ps --format="{{.Names}}")"
 
-i=1
-while read -r docker; do
-        name["$i"]="$docker"
-        echo "[$i]  ${name[$i]}"
-        i=$((i+1))
-done <<< "$dockers"
-
+echo "Select docker container to enter in shell"
+echo "Exit with CTRL+C"
 echo
-echo "Select docker number to spawn bash shell."
-read -r number
-
-docker="${name["$number"]}"
+select docker in $dockers; do
+        break
+done
 
 if [ -z "$docker" ]; then
         echo "Invalid option"

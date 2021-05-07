@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
 # Remote Real Time Packet Capture With Wireshark and pfsense
 
-ws=(
-	"ssh root@192.168.1.41 -p 22 tcpdump -i br0.100 -U -w - "
-	"ssh root@192.168.1.41 -p 22 tcpdump -i br0.69 -U -w - "
-	"ssh root@192.168.1.187 -p 22 tcpdump -i br0 host not 192.168.1.2 -U -w - "
+ssh=(
+	"ssh root@192.168.1.1 -p 22 tcpdump -i igb0 -U -w - "
+	"ssh root@192.168.1.1 -p 22 tcpdump -i igb1.999 -U -w - "
+	"ssh root@192.168.1.1 -p 22 tcpdump -i igb0 host not 192.168.1.2 -U -w - "
 )
 
-if [ -z "$1" ] || [ -z "${ws["$1"]}" ]; then
-	echo "Usage $(basename "$0") <number>"
-	for key in "${!ws[@]}"; do
-		echo "$key: wireshark -k -i <(${ws["$key"]})"
-	done
-else
-	wireshark -k -i <(${ws["$1"]})
+echo "Wireshark remote packet capture with pfsense"
+echo "Exit with CTRL+C"
+echo
+select ws in "${ssh[@]}"; do
+        break
+done
+
+if [ -z "$ws" ]; then
+        echo "Invalid option"
+        exit
 fi
+
+wireshark -k -i <($ws)
