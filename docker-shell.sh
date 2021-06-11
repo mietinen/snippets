@@ -6,7 +6,7 @@
 # cp /boot/bin/docker-shell.sh /usr/local/bin/docker-shell
 # chmod +x /usr/local/bin/docker-shell
 
-  
+
 dockers="$(docker ps --format="{{.Names}}")"
 
 echo "Select docker container to enter in shell"
