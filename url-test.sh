@@ -7,7 +7,6 @@ urls=(
     https://www.reddit.com
 )
 
-
 echo "Test multiple http(s) connections, sort by time to load"
 echo
 
@@ -20,6 +19,6 @@ for h in "${urls[@]}"; do
         output="${output:+${output}\n}$h FAILED FAILED FAILED"
     fi
 done
-echo -e "$output" | sort -k4 | column -t -o "    " -N URL,Connect,Start,Total
+(echo "URL Connect Start Total" ; (echo -e "$output" | sort -k4)) | column -t
 
 # vim: set ts=4 sw=4 tw=0 et :

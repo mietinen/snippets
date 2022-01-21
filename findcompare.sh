@@ -18,7 +18,7 @@ find="$(find "${@:1:$#-1}")"
 
 echo "Files found that have size that differs from dest:"
 while read -r f; do
-    name="$(basename "$f")"
+    name="${f##*/}"
     size="$(stat --printf="%s" "$f")"
     cfile="$(find "$dest" -iname "$name")"
     if [ -r "$cfile" ]; then
