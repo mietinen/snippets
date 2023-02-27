@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Script to enter bash/sh shell of running Docker Containers
+#
+# Use with Unraid: place script in /boot/bin/docker-shell
+# and add the following line to /boot/config/go
+#   install -Dm755 /boot/bin/docker-shell /usr/local/bin/docker-shell
+#
+# Use this want to install multiple scripts from /boot/bin/
+#   install -Dm755 -t /usr/local/bin /boot/bin/*
+
+dockers="$(docker ps --format="{{.Names}}")"
+
+echo "Select docker container to enter in shell"
+echo "Exit with CTRL+C"
+echo
+select docker in $dockers; do
+    break
+done
+
+if [ -z "$docker" ]; then
+    echo "Invalid option"
+    exit
+fi
+
+for shell in bash sh; do
+    echo
+    echo "Starting $shell shell on docker image $docker:"
+    docker exec -it "$docker" "$shell"
+    [ $? -ne 126 ] && break
+done
